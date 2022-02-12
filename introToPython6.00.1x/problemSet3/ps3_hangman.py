@@ -18,6 +18,7 @@
 # (so be sure to read the docstrings!)
 
 import random
+import string
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -66,7 +67,6 @@ def isWordGuessed(secretWord, lettersGuessed):
             return False
     return True
 
-
 def getGuessedWord(secretWord, lettersGuessed):
     '''
     secretWord: string, the word the user is guessing
@@ -83,7 +83,6 @@ def getGuessedWord(secretWord, lettersGuessed):
             result += '_'
     return result
 
-
 def getAvailableLetters(lettersGuessed):
     '''
     lettersGuessed: list, what letters have been guessed so far
@@ -91,13 +90,11 @@ def getAvailableLetters(lettersGuessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE...(Completed)
-    import string
     alphabet = list(string.ascii_lowercase)
     for letter in lettersGuessed:
         if letter in alphabet:
             alphabet.remove(letter)
     return ''.join(alphabet)
-    
 
 def hangman(secretWord):
     '''
@@ -121,15 +118,14 @@ def hangman(secretWord):
     '''
     # FILL IN YOUR CODE HERE...(Completed)
     lettersGuessed = []
-    mistakesMade = 0
+    numGuesses = 8
     print('Welcome to the game Hangman!')
     print('I am thinking of a word that is ' + str(len(secretWord)) + ' letters long.')
-    # game loop
-    while not isWordGuessed(secretWord, lettersGuessed) and (mistakesMade != 8):
-        availableLetters = getAvailableLetters(lettersGuessed)
+    # run the main game loop
+    while not isWordGuessed(secretWord, lettersGuessed) and (numGuesses != 0):
         print('-------------')
-        print('You have ' + str(8 - mistakesMade) + ' guesses left.')
-        print('Available letters: ' + availableLetters)
+        print('You have ' + str(numGuesses) + ' guesses left.')
+        print('Available letters: ' + getAvailableLetters(lettersGuessed))
         guess = input('Please guess a letter: ')
         guess = guess.lower()
         if guess in lettersGuessed:
@@ -140,10 +136,10 @@ def hangman(secretWord):
         else:
             print('Oops! That letter is not in my word: ', end='')
             lettersGuessed.append(guess)
-            mistakesMade += 1
+            numGuesses -= 1
         print(getGuessedWord(secretWord, lettersGuessed))
+    # display the game winning condition
     print('-------------')
-    # game winning condition
     if isWordGuessed(secretWord, lettersGuessed):
         print('Congratulations, you won!')
     else:
